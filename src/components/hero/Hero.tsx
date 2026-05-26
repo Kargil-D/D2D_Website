@@ -19,8 +19,8 @@ export default function Hero() {
     <section
       id="home"
       // overflow-visible so the search dropdown can escape the hero bounds.
-      // The background image is wrapped in its own clipping container below.
-      className="relative min-h-screen w-full flex items-center justify-center overflow-visible"
+      // z-20 keeps the dropdown above the next stacking-context section.
+      className="relative z-20 min-h-screen w-full flex items-center justify-center overflow-visible"
     >
       {/* Background image — isolated clipping container so the parent stays overflow-visible */}
       <div className="absolute inset-0 overflow-hidden">
