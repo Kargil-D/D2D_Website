@@ -121,7 +121,7 @@ export default async function ItineraryPage({ params }: PageProps) {
         </nav>
       </header>
 
-      <section className="relative h-[68vh] min-h-[480px] w-full">
+      <section className="relative h-[55vh] sm:h-[68vh] min-h-[400px] sm:min-h-[480px] w-full">
         <div className="absolute inset-0 overflow-hidden">
           <Image src={itin.image} alt={itin.title} fill priority sizes="100vw" className="object-cover" />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900/60 via-slate-900/30 to-slate-900/90" />
@@ -166,7 +166,7 @@ export default async function ItineraryPage({ params }: PageProps) {
       </section>
 
       <div className="sticky top-16 md:top-20 z-30 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           <div className="flex items-center gap-1 min-w-max">
             {[
               { id: "itinerary", label: "Itinerary", icon: Calendar },
