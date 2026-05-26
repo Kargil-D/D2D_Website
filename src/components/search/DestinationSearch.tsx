@@ -177,23 +177,38 @@ export default function DestinationSearch({
         </button>
       </motion.div>
 
-      {/* Dropdown � absolutely positioned, top-full, w-full, floats above all sections */}
+      {/* Dropdown — bottom sheet on mobile, floating on desktop */}
       <AnimatePresence>
         {open && !navigating && (
+          <>
+          {/* Mobile backdrop */}
           <motion.div
-            initial={{ opacity: 0, y: -10, scale: 0.98 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.15 }}
+            className="fixed inset-0 z-[99] bg-black/40 sm:hidden"
+            onClick={() => setOpen(false)}
+            aria-hidden="true"
+          />
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -10, scale: 0.98 }}
-            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
-            className="absolute top-full left-0 right-0 mt-3 z-[100] rounded-3xl bg-white/95 backdrop-blur-xl border border-white/60 shadow-2xl shadow-slate-950/30 overflow-hidden"
+            exit={{ opacity: 0, y: 20, scale: 0.98 }}
+            transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+            className="fixed inset-x-0 bottom-0 sm:absolute sm:inset-x-auto sm:bottom-auto sm:top-full sm:left-0 sm:right-0 mt-0 sm:mt-3 z-[100] rounded-t-3xl sm:rounded-3xl bg-white/[0.98] sm:bg-white/95 backdrop-blur-xl border border-white/60 shadow-2xl shadow-slate-950/30 overflow-hidden max-h-[70vh] sm:max-h-none"
             role="listbox"
           >
+            {/* Mobile drag handle */}
+            <div className="sm:hidden flex justify-center pt-3 pb-1">
+              <span className="w-10 h-1 rounded-full bg-slate-300" />
+            </div>
             <div className="sticky top-0 z-10 bg-white/95 backdrop-blur-xl px-5 py-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-slate-500 border-b border-slate-100">
               <Sparkles className="w-3.5 h-3.5 text-cyan-500" />
               {query ? "Matching destinations" : "Popular destinations"}
             </div>
 
-            <ul className="max-h-[350px] sm:max-h-[420px] overflow-y-auto overscroll-contain py-2 [scrollbar-width:thin] [scrollbar-color:#06b6d4_transparent]">
+            <ul className="max-h-[55vh] sm:max-h-[420px] overflow-y-auto overscroll-contain py-2 [scrollbar-width:thin] [scrollbar-color:#06b6d4_transparent]">
               {filtered.length === 0 && (
                 <li className="px-5 py-8 text-center text-sm text-slate-500">
                   No destinations found. Try Maldives, Bali, or Dubai.
@@ -246,6 +261,7 @@ export default function DestinationSearch({
               ))}
             </ul>
           </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>
