@@ -28,6 +28,7 @@ export default function DestinationSearch({
 }: DestinationSearchProps) {
   const router = useRouter();
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const [query, setQuery] = useState("");
@@ -45,13 +46,16 @@ export default function DestinationSearch({
     );
   }, [query]);
 
-  // Outside-click on `click` (not mousedown) so it never races with the
-  // dropdown item's pointerdown handler.
+  // Outside-click closes the dropdown only if the click is outside both
+  // the search wrapper AND the dropdown (which is fixed-positioned on mobile
+  // and therefore not a DOM child of the wrapper).
   useEffect(() => {
     const handler = (e: MouseEvent) => {
+      const target = e.target as Node;
       if (
         wrapperRef.current &&
-        !wrapperRef.current.contains(e.target as Node)
+        !wrapperRef.current.contains(target) &&
+        (!dropdownRef.current || !dropdownRef.current.contains(target))
       ) {
         setOpen(false);
       }
@@ -192,6 +196,7 @@ export default function DestinationSearch({
             aria-hidden="true"
           />
           <motion.div
+            ref={dropdownRef}
             initial={{ opacity: 0, y: 20, scale: 0.98 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.98 }}
@@ -217,15 +222,14 @@ export default function DestinationSearch({
 
               {filtered.map((d) => (
                 <li key={d.name}>
-                  {/*
-                    Use `pointerdown` instead of click:
-                    - Fires before input blur, so no race with outside-click
-                    - Triggers on the very first tap, no double-click feel
-                  */}
                   <button
                     type="button"
-                    onPointerDown={(e) => {
+                    onMouseDown={(e) => {
+                      // Desktop: fire before blur so outside-click can't race
                       e.preventDefault();
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
                       goTo(d.name);
                     }}
                     className="w-full flex items-center gap-4 px-4 py-3 cursor-pointer hover:bg-cyan-50 active:bg-cyan-100 focus:bg-cyan-50 outline-none text-left transition-colors group"
